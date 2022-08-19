@@ -1,0 +1,104 @@
+﻿@page "/"
+@using DamienVDK.Bookrentoo.OrganizationApp.Models.Firebase
+@using DamienVDK.Bookrentoo.OrganizationApp.Models.Forms
+@using DamienVDK.Bookrentoo.OrganizationApp.Services
+@using Newtonsoft.Json
+@inject NavigationManager navigationManager
+@inject IAuthFirebaseService authFirebaseService;
+<div style="margin-left:10vw; margin-right: 10vw; display: block; margin-top: 75px; text-align: center">
+    <AuthorizeView>
+        <Authorized>
+            <CreateOrDisplayOrganization></CreateOrDisplayOrganization>
+        </Authorized>
+        <NotAuthorized>
+            <MudCard>
+                <MudCardHeader style="@($"color:{Colors.Yellow.Darken2}")">
+                    <CardHeaderContent>
+                        <MudText Class="hujan" Typo="Typo.h5">What is &lt;Bookrentoo&gt;?</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="3">
+                            <img src="img/read_coffee.png" style="max-width:100%" />
+                        </MudItem>
+                        <MudItem xs="9">
+                            <MudText Typo="Typo.body1"><span class="hujan">&lt;Bookrentoo&gt;</span> is a <span style="font-style: italic">free, open-source application</span>
+                        whose purpose is to organize a library where
+                        books are brought by members of the same
+                                organization.
+                            </MudText>
+                        </MudItem>
+                    </MudGrid>
+                    <MudDivider />
+                </MudCardContent>
+                <MudCardHeader style="@($"color:{Colors.Yellow.Darken2}")">
+                    <CardHeaderContent>
+                        <MudText Class="hujan" Typo="Typo.h5">Login to create/update your library</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Style="text-align: -webkit-center ">
+                    <div Style="max-width:400px;">
+                        <MudTextField @bind-Value="loginRequest.Email" Label="Email" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"></MudTextField>
+                        <MudTextField Label="Password" @bind-Value="loginRequest.Password"  InputType="InputType.Password" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password"></MudTextField>
+                    </div>
+                    <p>&nbsp;</p>
+                    @if(ShowErrors)
+                    {
+                        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+                        <p>&nbsp;</p>
+                    }
+                    @if (IsLoading)
+                    {
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Outlined" style="@($"color:{Colors.Yellow.Darken2}")"
+                                   StartIcon="@Icons.Material.Filled.Login"
+                                   @onclick="HandleLogin">Log in</MudButton>
+                    }
+                </MudCardContent>
+              </MudCard>
+
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code
+{
+    private LoginRequest loginRequest = new LoginRequest();
+    private bool ShowErrors { get; set; }
+    private bool IsLoading { get; set; }
+    private string Error { get; set; } = "";
+
+
+    private async Task HandleLogin()
+    {
+        ShowErrors = false;
+
+        try
+        {
+            IsLoading = true;
+            await authFirebaseService.Login(loginRequest.Email, loginRequest.Password);
+            navigationManager.NavigateTo("/");
+        }
+        catch (FirebaseAuthException e)
+        {
+            var firebaseAuthExceptionDetail = JsonConvert.DeserializeObject<FirebaseAuthExceptionDetail>(e.ResponseData);
+            Error = firebaseAuthExceptionDetail.GetErrorMessage();
+            ShowErrors = true;
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+            ShowErrors = true;
+            StateHasChanged();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

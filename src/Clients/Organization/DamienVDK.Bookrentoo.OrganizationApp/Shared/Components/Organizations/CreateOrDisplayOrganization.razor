@@ -1,0 +1,58 @@
+﻿@inject IOrganizationService organizationService
+@if (IsLoading)
+{
+    <i class="fas fa-spinner fa-spin fa-2x"></i>
+}
+else if (HasError)
+{
+    <MudAlert Severity="Severity.Error">
+        Some error(s) occured while getting organization.<br/>
+        Error : @ErrorMessage<br/>
+        <a href="" @onclick="@OnInitializedAsync" @onclick:preventDefault>Retry</a>
+    </MudAlert>
+}
+else
+{
+    if (Organization == null)
+    {
+        <CreateOrganizationComponent />
+    }
+    else
+    {
+        <DisplayOrganizationComponent Organization="Organization" />
+    }
+}
+
+@code {
+
+    private bool HasOrganization { get; set; } = false;
+    private bool AllreadyInitialized { get; set; } = false;
+    private Organization? Organization { get; set; }
+    private bool HasError { get; set; } = false;
+    private bool IsLoading { get; set; } = false;
+    private string ErrorMessage { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!AllreadyInitialized)
+        {
+            try
+            {
+                IsLoading = true;
+                HasError = false;
+                AllreadyInitialized = true;
+                Organization = await organizationService.GetOrganizationAsync();
+                HasOrganization = Organization != null;
+            }
+            catch(Exception ex)
+            {
+                HasError = true;
+                ErrorMessage = ex.InnerException?.Message ?? ex.Message;
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+    }
+}

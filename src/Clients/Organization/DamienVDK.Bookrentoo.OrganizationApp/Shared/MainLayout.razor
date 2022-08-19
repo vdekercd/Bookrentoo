@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Bookrentoo</PageTitle>
+
+<MudAppBar style="@($"background:{Colors.Grey.Lighten4};color:{Colors.Grey.Darken4}")" Fixed="true" Elevation="0">
+    <MudText class="hujan" Typo="Typo.h4">&lt;Bookrentoo&gt;</MudText>
+    <MudSpacer />
+    <AccountSummaryComponent />
+</MudAppBar>
+
+<MudContainer Class="d-flex align-center justify-center mud-width-full"  style="height:100vh;">
+        @Body
+</MudContainer >
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />

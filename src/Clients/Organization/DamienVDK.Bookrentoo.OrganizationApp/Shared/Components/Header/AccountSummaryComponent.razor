@@ -1,0 +1,40 @@
+﻿@inject AuthenticationStateProvider authenticationStateProvider
+@inject IAuthFirebaseService authFirebaseService
+@inject NavigationManager navigationManager
+
+<AuthorizeView>
+    <Authorized>
+        <i class="fas fa-user-circle fa-2x"></i>&nbsp;Hello, @_authenticationState.GetUsername()! &nbsp;&nbsp;
+        <MudButton Variant="Variant.Outlined" 
+                       StartIcon="@Icons.Material.Filled.Logout"
+                   @onclick="HandleLogout">Log out</MudButton>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Variant="Variant.Outlined"
+                   StartIcon="@Icons.Material.Filled.PersonAdd"
+                   @onclick="GoToRegisterPage">Sign up</MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    private AuthenticationState _authenticationState = null!;
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        _authenticationState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        StateHasChanged();
+    }
+
+    private void GoToRegisterPage()
+    {
+        navigationManager.NavigateTo("/register");
+    }
+
+    private async Task HandleLogout()
+    {
+        await authFirebaseService.Logout();
+        navigationManager.NavigateTo("/");
+    }
+
+}

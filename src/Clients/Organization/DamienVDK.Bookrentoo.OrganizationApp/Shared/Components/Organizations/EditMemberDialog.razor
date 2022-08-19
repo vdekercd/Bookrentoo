@@ -1,0 +1,39 @@
+﻿@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Create" Class="mr-3 mb-n1"/>
+            Create organization
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField Value="@Member.FirstName" Label="First name"/>
+        <MudTextField Value="@Member.LastName" Label="Last name"/>
+        <MudTextField Value="@Member.Email" Label="Email"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Success" OnClick="AddMember">Add member</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [CascadingParameter] 
+    MudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public Member Member { get; set; } = new Member();
+    
+    private void Cancel()
+    {
+        MudDialog?.Cancel();
+    }
+
+    private void AddMember()
+    {
+        Snackbar.Add("Server Deleted", Severity.Success);
+        MudDialog?.Close(DialogResult.Ok(Member.Id));
+    }
+}

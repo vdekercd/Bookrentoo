@@ -1,0 +1,78 @@
+﻿@page "/Register"
+@using DamienVDK.Bookrentoo.OrganizationApp.Services
+@using Microsoft.AspNetCore.Components
+@using DamienVDK.Bookrentoo.OrganizationApp.Models.Forms
+@using DamienVDK.Bookrentoo.OrganizationApp.Models.Firebase
+@using DamienVDK.Bookrentoo.OrganizationApp.Services
+@using Newtonsoft.Json
+@inject IAuthFirebaseService authFirebaseService
+@inject NavigationManager navigationManager
+
+<MudCard>
+    <MudCardHeader style="@($"color:{Colors.Yellow.Darken2}")">
+        <CardHeaderContent>
+            <MudText Class="hujan" Typo="Typo.h5">What is &lt;Bookrentoo&gt;?</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent Style="text-align: -webkit-center ">
+        <div Style="max-width:400px;">
+            <MudTextField @bind-Value="registerRequest.Email" Label="Email" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.PermIdentity"></MudTextField>
+            <MudTextField @bind-Value="registerRequest.DisplayName" Label="Email" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label"></MudTextField>
+            <MudTextField Label="Password" @bind-Value="registerRequest.Password" InputType="InputType.Password" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password"></MudTextField>
+            <MudTextField Label="Password" @bind-Value="registerRequest.ConfirmPassword" InputType="InputType.Password" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Password"></MudTextField>
+        </div>
+    </MudCardContent>
+</MudCard>
+@if (ShowErrors)
+        {
+            <div class="alert alert-danger" role="alert">
+                <p>@Error</p>
+            </div>
+        }
+<div class="text-center" style=" margin-top: 25px;">
+    <button @onclick="@HandleRegister" class="button slide_right">
+        <i class="fas fa-save"></i>&nbsp;REGISTER
+    </button>
+</div>
+
+@code
+{
+    private RegisterRequest registerRequest = new RegisterRequest();
+    private bool ShowErrors;
+    private bool IsLoading { get; set; }
+    private string Error = "";
+
+    private async Task HandleRegister()
+    {
+        try
+        {
+            IsLoading = true;
+            ShowErrors = false;
+
+            if (registerRequest.Password != registerRequest.ConfirmPassword)
+            {
+                ShowErrors = true;
+                Error = "Password and confirm password should be the same";
+
+                return;
+            }
+        }
+        catch (FirebaseAuthException e)
+        {
+            var firebaseAuthExceptionDetail = JsonConvert.DeserializeObject<FirebaseAuthExceptionDetail>(e.ResponseData);
+            Error = firebaseAuthExceptionDetail.GetErrorMessage();
+            ShowErrors = true;
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+            ShowErrors = true;
+            StateHasChanged();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

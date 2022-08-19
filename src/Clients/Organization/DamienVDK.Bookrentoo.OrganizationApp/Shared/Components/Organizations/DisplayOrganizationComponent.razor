@@ -1,0 +1,40 @@
+﻿@using MongoDB.Bson
+@inject IDialogService DialogService
+
+<div style="margin-left:10vw; margin-right: 10vw; display: block; margin-top: 75px; text-align: center">
+    <MudCard>
+        <MudCardHeader style="@($"color:{Colors.Yellow.Darken2}")">
+            <CardHeaderContent>
+                <MudText Class="hujan" Typo="Typo.h5">Manage your organization!</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent Style="text-align: -webkit-center ">
+            You currently have @Organization.Members.Count member(s)!
+            <MudButton OnClick="OpenAddMemberDialogAsync">Add member</MudButton>
+        </MudCardContent>
+    </MudCard>
+</div>
+
+@code
+{
+    private bool _shouldRender;
+    private ObjectId _oldObjectId;
+
+    [Parameter]
+    public Organization Organization { get; set; } = new Organization();
+
+    protected override void OnParametersSet()
+    {
+        _shouldRender = !Organization.Id.Equals(_oldObjectId);
+        _oldObjectId = Organization.Id;
+    }
+
+    protected override bool ShouldRender() => _shouldRender;
+
+    private async Task OpenAddMemberDialogAsync()
+    {
+        var dialog = DialogService.Show<EditMemberDialog>("Add member");
+        var result = await dialog.Result;
+    }
+
+}

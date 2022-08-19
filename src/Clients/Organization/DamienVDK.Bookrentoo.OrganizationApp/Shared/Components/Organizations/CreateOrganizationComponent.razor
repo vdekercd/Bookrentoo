@@ -1,0 +1,90 @@
+﻿@using DamienVDK.Bookrentoo.OrganizationApp.Models.Firebase
+@using Newtonsoft.Json
+@inject IOrganizationService organizationService
+@inject NavigationManager navigationManager
+
+<div style="margin-left:10vw; margin-right: 10vw; display: block; margin-top: 75px; text-align: center">
+    <MudCard>
+        <MudCardHeader style="@($"color:{Colors.Yellow.Darken2}")">
+            <CardHeaderContent>
+                <MudText Class="hujan" Typo="Typo.h5">Create your organization!</MudText>
+            </CardHeaderContent>
+        </MudCardHeader>
+        <MudCardContent Style="text-align: -webkit-center ">
+            <MudText>You don't have an organization yet! All you need is a name to create your organization.<br/>
+                Once created, you can add all you members. They will receive an email to access to your library!</MudText>
+                <div Style="max-width:400px;">
+                    <MudTextField @bind-Value="OrganizationName" Label="Name" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label"></MudTextField>
+                </div>
+                <p>&nbsp;</p>
+                @if(ShowErrors)
+                    {
+                        <MudAlert Severity="Severity.Error">@Error</MudAlert>
+                        <p>&nbsp;</p>
+                    }
+                @if (IsLoading)
+                {
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+                }
+                else
+                {
+                    @if (IsSucceed)
+                    {
+                    <MudAlert Severity="Severity.Success">Organization created! Click
+                        <a href="" @onclick='() => navigationManager.NavigateTo("/")' @onclick:preventDefault>here</a>
+                        see it!</MudAlert>
+                    <p>&nbsp;</p>
+                }
+                    else
+                    {
+                    <MudButton Variant="Variant.Outlined" style="@($"color:{Colors.Yellow.Darken2}")"
+                                StartIcon="@Icons.Material.Filled.Add"
+                       @onclick="CreateOrganizationAsync">Create</MudButton>
+                    }
+                }
+        </MudCardContent>
+    </MudCard>
+</div>
+
+@code {
+    private string OrganizationName { get; set; } = string.Empty;
+    private bool ShowErrors { get; set; }
+    private bool IsSucceed { get; set; } 
+    private bool IsLoading { get; set; }
+    private string Error { get; set; } = "";
+
+    private async Task CreateOrganizationAsync()
+    {
+        ShowErrors = false;
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(OrganizationName))
+            {
+                Error = "The name must be filled";
+                ShowErrors = true;
+                return;
+            }
+
+            IsLoading = true;
+            var organization = new Organization()
+                {
+                    Name = OrganizationName
+                };
+
+            await organizationService.CreateOrganizationAsync(organization);
+            navigationManager.NavigateTo("/");
+            IsSucceed = true;
+        }
+        catch (Exception e)
+        {
+            Error = e.Message;
+            ShowErrors = true;
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+}

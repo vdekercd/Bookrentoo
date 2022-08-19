@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32203.90
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{74CBD026-4A05-47B4-A6FE-7A6E2CB7E70F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Organization", "Organization", "{9845294D-3367-4A75-844D-AFC64486328D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{E7BD2399-CE20-42E1-A70D-E220F384020C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Organization", "Organization", "{20F8D7E6-39E0-4660-82DC-FE2079BD84D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DamienVDK.Bookrentoo.OrganizationApi", "Services\Organization\DamienVDK.Bookrentoo.OrganizationApi\DamienVDK.Bookrentoo.OrganizationApi.csproj", "{AC469F24-7464-436E-A1D0-B08D80EF7B64}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C6705D8E-F0B0-4CC3-A507-BB493F8C5A24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DamienVDK.Bookrentoo.OrganizationApp", "Clients\Organization\DamienVDK.Bookrentoo.OrganizationApp\DamienVDK.Bookrentoo.OrganizationApp.csproj", "{90EEE8CD-CB4A-45BD-901F-AD456663775C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{648C91EA-D4BB-464B-99CA-899F41BE6133}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DamienVDK.Bookrentoo.Common", "Common\DamienVDK.Bookrentoo.Common\DamienVDK.Bookrentoo.Common.csproj", "{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC469F24-7464-436E-A1D0-B08D80EF7B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC469F24-7464-436E-A1D0-B08D80EF7B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC469F24-7464-436E-A1D0-B08D80EF7B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC469F24-7464-436E-A1D0-B08D80EF7B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6705D8E-F0B0-4CC3-A507-BB493F8C5A24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6705D8E-F0B0-4CC3-A507-BB493F8C5A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6705D8E-F0B0-4CC3-A507-BB493F8C5A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6705D8E-F0B0-4CC3-A507-BB493F8C5A24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90EEE8CD-CB4A-45BD-901F-AD456663775C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90EEE8CD-CB4A-45BD-901F-AD456663775C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90EEE8CD-CB4A-45BD-901F-AD456663775C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90EEE8CD-CB4A-45BD-901F-AD456663775C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9845294D-3367-4A75-844D-AFC64486328D} = {74CBD026-4A05-47B4-A6FE-7A6E2CB7E70F}
+		{20F8D7E6-39E0-4660-82DC-FE2079BD84D8} = {E7BD2399-CE20-42E1-A70D-E220F384020C}
+		{AC469F24-7464-436E-A1D0-B08D80EF7B64} = {9845294D-3367-4A75-844D-AFC64486328D}
+		{90EEE8CD-CB4A-45BD-901F-AD456663775C} = {20F8D7E6-39E0-4660-82DC-FE2079BD84D8}
+		{F60F33F4-DB1F-4F1F-B26A-C4DD4C6057ED} = {648C91EA-D4BB-464B-99CA-899F41BE6133}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0B45FD55-3C41-4190-B8C1-4289C87D32FD}
+	EndGlobalSection
+EndGlobal

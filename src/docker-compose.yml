@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  #-------------------------------------------------------------------------
+  # Bookrentoo app
+  damienvdk.bookrentoo.organizationapp:
+    image: ${DOCKER_REGISTRY-}damienvdkbookrentooorganizationapp
+    build:
+      context: .
+      dockerfile: Clients/Organization/DamienVDK.Bookrentoo.OrganizationApp/Dockerfile
+
+  damienvdk.bookrentoo.organizationapp-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd",
+        "-app-id", "OrganizationApp", 
+        "-app-port", "80"]
+    depends_on:
+      - damienvdk.bookrentoo.organizationapp
+    network_mode: "service:damienvdk.bookrentoo.organizationapp"
+
+  #-------------------------------------------------------------------------
+  # Bookrentoo api
+  damienvdk.bookrentoo.organizationapi:
+    image: ${DOCKER_REGISTRY-}damienvdkbookrentooorganizationapi
+    build:
+      context: .
+      dockerfile: Services/Organization/DamienVDK.Bookrentoo.OrganizationApi/Dockerfile
+
+  damienvdk.bookrentoo.organizationapi-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", 
+        "-app-id", "OrganizationApi", 
+        "-app-port", "80",
+        "-components-path", "/components"]
+    volumes:
+      - "./components/:/components"
+    depends_on:
+      - damienvdk.bookrentoo.organizationapi
+    network_mode: "service:damienvdk.bookrentoo.organizationapi"
+
+  #-------------------------------------------------------------------------
+  #Mongo
+  mongodb:
+    container_name: mongodb4.0   
+    image: mongo:4.0    
+    environment:
+      - MONGO_INITDB_DATABASE=bookrentoo
+      - MONGO_INITDB_ROOT_USERNAME=bookrentoosa
+      - MONGO_INITDB_ROOT_PASSWORD=<YOUR_PASSWORD>
+    ports:
+      - 27017:27017
+    volumes:
+      #- ./mongo/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongodb:/data/db
+
+volumes:
+  mongodb:

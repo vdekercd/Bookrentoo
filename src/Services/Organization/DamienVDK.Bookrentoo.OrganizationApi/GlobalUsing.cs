@@ -1,0 +1,17 @@
+﻿global using DamienVDK.Bookrentoo.OrganizationApi.Extensions;
+global using DamienVDK.Bookrentoo.OrganizationApi.Options;
+global using DamienVDK.Bookrentoo.OrganizationApi.Policies;
+global using DamienVDK.Bookrentoo.OrganizationApi.Services;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.IdentityModel.Tokens;
+global using Polly;
+global using Polly.Retry;
+global using System.Net;
+global using System.Security.Cryptography.X509Certificates;
+global using System.Text;
+global using DamienVDK.Bookrentoo.Common.Models;
+global using Microsoft.Extensions.Options;
+global using MongoDB.Driver;
+global using System.Security.Authentication;
+global using Microsoft.AspNetCore.Mvc;

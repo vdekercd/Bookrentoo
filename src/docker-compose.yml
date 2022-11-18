@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   #-------------------------------------------------------------------------
-  # Bookrentoo app
+  # Bookrentoo app 
   damienvdk.bookrentoo.organizationapp:
     image: ${DOCKER_REGISTRY-}damienvdkbookrentooorganizationapp
     build:

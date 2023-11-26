@@ -11,7 +11,7 @@ public class FirebaseAuthenticationStateProvider : AuthenticationStateProvider
 {
     private readonly ProtectedLocalStorage _storageService;
     private readonly FirebaseAuthProvider _firebaseAuthProvider;
-    private const string APIKey = "YOUR_API_KEY";
+    private const string APIKey = "-api-KEY";
 
     public FirebaseAuthenticationStateProvider(ProtectedLocalStorage storageService)
     {
@@ -24,13 +24,13 @@ public class FirebaseAuthenticationStateProvider : AuthenticationStateProvider
     {
         try
         {
-            var firebaseAuth = await _storageService.GetAsync<FirebaseAuth>("firebaseAuth");
-            var firebaseAuthValue = firebaseAuth.Value;
+            var firebaseAuthValue = await _storageService.GetAsync<FirebaseAuth>("firebaseAuth");
+            var firebaseAuth = firebaseAuthValue.Value;
 
-            if (firebaseAuthValue is null)
+            if (firebaseAuth is null)
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(await ParseClaimsFromJwtAsync(firebaseAuthValue), "jwt")));
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(await ParseClaimsFromJwtAsync(firebaseAuth), "jwt")));
         }
         catch
         {

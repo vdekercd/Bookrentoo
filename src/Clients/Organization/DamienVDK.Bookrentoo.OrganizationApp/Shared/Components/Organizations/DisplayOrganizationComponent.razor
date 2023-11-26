@@ -9,7 +9,7 @@
             </CardHeaderContent>
         </MudCardHeader>
         <MudCardContent Style="text-align: -webkit-center ">
-            @* You currently have @Organization.Members.Count member(s)! *@
+            You currently have @Organization.Members.Count member(s)!
             <MudButton OnClick="OpenAddMemberDialogAsync">Add member</MudButton>
         </MudCardContent>
     </MudCard>
@@ -18,15 +18,15 @@
 @code
 {
     private bool _shouldRender;
-    private ObjectId _oldObjectId;
+    private string _oldName;
 
-    // [Parameter]
-    // public Organization Organization { get; set; } = new Organization();
+    [Parameter]
+    public OrganizationDashboardResponse Organization { get; set; } = new OrganizationDashboardResponse();
 
     protected override void OnParametersSet()
     {
-        // _shouldRender = !Organization.Id.Equals(_oldObjectId);
-        // _oldObjectId = Organization.Id;
+        _shouldRender = !Organization.Name.Equals(_oldName);
+        _oldName = Organization.Name;
     }
 
     protected override bool ShouldRender() => _shouldRender;

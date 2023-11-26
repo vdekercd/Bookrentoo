@@ -9,7 +9,7 @@ namespace DamienVDK.Bookrentoo.OrganizationApp.Services;
 
 public class AuthFirebaseService : IAuthFirebaseService
 {
-    private const string APIKey = "API_KEY"; // TODO Setttings
+    private const string APIKey = "_API_KEY"; // TODO Setttings
     private readonly AuthenticationStateProvider _authenticationStateProvider;
     private readonly ProtectedLocalStorage _localStorage;
     private readonly FirebaseAuthProvider _firebaseAuthProvider;

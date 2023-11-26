@@ -14,7 +14,7 @@
             <MudText>You don't have an organization yet! All you need is a name to create your organization.<br/>
                 Once created, you can add all you members. They will receive an email to access to your library!</MudText>
                 <div Style="max-width:400px;">
-                    <MudTextField @bind-Value="OrganizationName" Label="Name" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label"></MudTextField>
+                    <MudTextField @bind-Value="CreateOrganizationRequest.Name" Label="Name" Variant="Variant.Text" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Label"></MudTextField>
                 </div>
                 <p>&nbsp;</p>
                 @if(ShowErrors)
@@ -47,7 +47,7 @@
 </div>
 
 @code {
-    private string OrganizationName { get; set; } = string.Empty;
+    private CreateOrganizationRequest CreateOrganizationRequest { get; set; } = new CreateOrganizationRequest();
     private bool ShowErrors { get; set; }
     private bool IsSucceed { get; set; } 
     private bool IsLoading { get; set; }
@@ -59,7 +59,7 @@
 
         try
         {
-            if (string.IsNullOrWhiteSpace(OrganizationName))
+            if (string.IsNullOrWhiteSpace(CreateOrganizationRequest.Name))
             {
                 Error = "The name must be filled";
                 ShowErrors = true;
@@ -67,12 +67,8 @@
             }
 
             IsLoading = true;
-            var organization = new Organization()
-                {
-                    Name = OrganizationName
-                };
 
-            await organizationService.CreateOrganizationAsync(organization);
+            await organizationService.CreateOrganizationAsync(CreateOrganizationRequest);
             navigationManager.NavigateTo("/");
             IsSucceed = true;
         }

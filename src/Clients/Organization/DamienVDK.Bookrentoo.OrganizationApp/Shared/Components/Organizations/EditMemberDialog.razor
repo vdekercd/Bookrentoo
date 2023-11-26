@@ -8,9 +8,9 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField Value="@Member.FirstName" Label="First name"/>
-        <MudTextField Value="@Member.LastName" Label="Last name"/>
-        <MudTextField Value="@Member.Email" Label="Email"/>
+        @* <MudTextField Value="@Member.FirstName" Label="First name"/> *@
+        @* <MudTextField Value="@Member.LastName" Label="Last name"/> *@
+        @* <MudTextField Value="@Member.Email" Label="Email"/> *@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
@@ -23,8 +23,8 @@
     [CascadingParameter] 
     MudDialogInstance? MudDialog { get; set; }
 
-    [Parameter]
-    public Member Member { get; set; } = new Member();
+    // [Parameter]
+    // public Member Member { get; set; } = new Member();
     
     private void Cancel()
     {
@@ -34,6 +34,6 @@
     private void AddMember()
     {
         Snackbar.Add("Server Deleted", Severity.Success);
-        MudDialog?.Close(DialogResult.Ok(Member.Id));
+        // MudDialog?.Close(DialogResult.Ok(Member.Id));
     }
 }

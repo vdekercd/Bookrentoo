@@ -1,42 +1,34 @@
-﻿using Newtonsoft.Json;
-using System.Text;
+﻿namespace DamienVDK.Bookrentoo.OrganizationApp.Services;
 
-namespace DamienVDK.Bookrentoo.OrganizationApp.Services;
-
-public class OrganizationService : IOrganizationService
+public class OrganizationService(
+        ProtectedLocalStorage storageService, 
+        IHttpClientFactory httpClientFactory)
+    : IOrganizationService
 {
-    private readonly ProtectedLocalStorage _storageService;
 
-    public OrganizationService(ProtectedLocalStorage storageService)
+    public async Task<OrganizationDashboardResponse?> GetOrganizationAsync()
     {
-        _storageService = storageService;
-    }
-
-    public async Task<Organization?> GetOrganizationAsync()
-    {
-        var client = new DaprClientBuilder().Build();
-        var request = await GetRequestMessageWithHeadersAsync(client, HttpMethod.Get, "Organization");
-        var response =  await client.InvokeMethodWithResponseAsync(request);
+        var httpClient = await GetHttpClientWithHeadersAsync();
+        var response = await httpClient.GetAsync("Organization");
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             return null;
         response.EnsureSuccessStatusCode();
-        return JsonConvert.DeserializeObject<Organization>(await response.Content.ReadAsStringAsync());
+        return JsonConvert.DeserializeObject<OrganizationDashboardResponse>(await response.Content.ReadAsStringAsync());
     }
-
-    public async Task CreateOrganizationAsync(Organization organization)
+    
+    public async Task CreateOrganizationAsync(CreateOrganizationRequest createOrganizationRequest)
     {
-        var client = new DaprClientBuilder().Build();
-        var request = await GetRequestMessageWithHeadersAsync(client, HttpMethod.Post, "Organization");
-        request.Content = new StringContent(JsonConvert.SerializeObject(organization), Encoding.UTF8, "application/json");
-        await client.InvokeMethodAsync(request);
+        var httpClient = await GetHttpClientWithHeadersAsync();
+        var content = new StringContent(JsonConvert.SerializeObject(createOrganizationRequest), Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("Organization", content);
     }
-
-    private async Task<HttpRequestMessage> GetRequestMessageWithHeadersAsync(DaprClient client, HttpMethod method, string methodName)
+    //
+    private async Task<HttpClient> GetHttpClientWithHeadersAsync()
     {
-        var firebaseAuth = await _storageService.GetAsync<FirebaseAuth>("firebaseAuth");
+        var firebaseAuth = await storageService.GetAsync<FirebaseAuth>("firebaseAuth");
         var firebaseAuthValue = firebaseAuth.Value;
-        var request = client.CreateInvokeMethodRequest(method, Components.ORGANIZATION_API, methodName);
-        request.Headers.Authorization = new AuthenticationHeaderValue("bearer", firebaseAuthValue!.FirebaseToken);
-        return request;
+        var httpClient = httpClientFactory.CreateClient();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", firebaseAuthValue!.FirebaseToken);
+        return httpClient;
     }
 }

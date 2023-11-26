@@ -1,8 +1,7 @@
-﻿namespace DamienVDK.Bookrentoo.OrganizationApp.Services
+﻿namespace DamienVDK.Bookrentoo.OrganizationApp.Services;
+
+public interface IOrganizationService
 {
-    public interface IOrganizationService
-    {
-        Task<Organization?> GetOrganizationAsync();
-        Task CreateOrganizationAsync(Organization organization);
-    }
+    Task<OrganizationDashboardResponse?> GetOrganizationAsync();
+    Task CreateOrganizationAsync(CreateOrganizationRequest createOrganizationRequest);
 }

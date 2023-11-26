@@ -13,21 +13,21 @@ else if (HasError)
 }
 else
 {
-    if (Organization == null)
-    {
-        <CreateOrganizationComponent />
-    }
-    else
-    {
-        <DisplayOrganizationComponent Organization="Organization" />
-    }
+    @* if (Organization == null) *@
+    @* { *@
+    @*     <CreateOrganizationComponent /> *@
+    @* } *@
+    @* else *@
+    @* { *@
+    @*     <DisplayOrganizationComponent Organization="Organization" /> *@
+    @* } *@
 }
 
 @code {
 
     private bool HasOrganization { get; set; } = false;
     private bool AllreadyInitialized { get; set; } = false;
-    private Organization? Organization { get; set; }
+    // private Organization? Organization { get; set; }
     private bool HasError { get; set; } = false;
     private bool IsLoading { get; set; } = false;
     private string ErrorMessage { get; set; } = string.Empty;
@@ -41,8 +41,8 @@ else
                 IsLoading = true;
                 HasError = false;
                 AllreadyInitialized = true;
-                Organization = await organizationService.GetOrganizationAsync();
-                HasOrganization = Organization != null;
+                // Organization = await organizationService.GetOrganizationAsync();
+                // HasOrganization = Organization != null;
             }
             catch(Exception ex)
             {

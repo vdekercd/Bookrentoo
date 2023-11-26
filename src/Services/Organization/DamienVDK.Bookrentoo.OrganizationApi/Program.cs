@@ -1,15 +1,25 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+using DamienVDK.Bookrentoo.Common;
+using Microsoft.Extensions.Hosting;
+using System.ComponentModel;
+using DamienVDK.Bookrentoo.OrganizationApi;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 var keys = await new FirebaseSigningKeysGenerator().GetKeysAsync();
 
+builder.AddNpgsqlDbContext<OrganizationDbContext>(Components.PostgreSqlDatabase);
 builder.Services.AddFirebaseAuthentication(keys)
     .AddFirebaseAuthorization()
+    .AddAutoMapper(typeof(MappingProfile))
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
-    .AddScoped<OrganizationService>()
     .AddControllers();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
